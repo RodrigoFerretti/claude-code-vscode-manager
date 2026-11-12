@@ -1,0 +1,77 @@
+/* Colours and fonts come from the VS Code theme. The one colour of our own, --you, only ever means "an agent is blocked on you". */
+:root {
+  --you: var(--vscode-charts-orange, #d18616);
+  --quiet: var(--vscode-descriptionForeground, #9d9d9d);
+  --line: var(--vscode-sideBarSectionHeader-border, var(--vscode-widget-border, rgba(128, 128, 128, .3)));
+  --field-line: var(--vscode-input-border, var(--line));
+  --mono: var(--vscode-editor-font-family, monospace);
+}
+body { margin: 0; padding: 0 0 16px; background: transparent; color: var(--vscode-foreground); font-family: var(--vscode-font-family); font-size: var(--vscode-font-size, 13px); line-height: 20px; font-variant-numeric: tabular-nums; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; text-align: left; }
+button:focus-visible { outline: 1px solid var(--vscode-focusBorder); outline-offset: 1px; }
+
+/* Search */
+.top { position: sticky; top: 0; z-index: 1; padding: 8px 12px 0 10px; background: var(--vscode-sideBar-background); }
+.find { display: flex; align-items: center; gap: 6px; height: 26px; box-sizing: border-box; padding: 0 8px; background: var(--vscode-input-background); border: 1px solid var(--field-line); border-radius: 3px; color: var(--quiet); }
+.find:focus-within { border-color: var(--vscode-focusBorder); }
+.find svg { flex: none; }
+.find input { flex: 1; min-width: 0; border: 0; padding: 0; background: none; outline: none; font: inherit; color: var(--vscode-input-foreground); }
+.find input::placeholder { color: var(--vscode-input-placeholderForeground, var(--quiet)); opacity: 1; }
+
+/* Sections */
+.gap { height: 10px; }
+.zone { padding: 14px 12px 4px 10px; font-size: 11px; line-height: 16px; font-weight: 500; color: var(--quiet); }
+.empty { padding: 2px 12px 0 29px; }
+.list > .empty:first-child { padding-top: 16px; }
+.empty strong { display: block; font-weight: 600; }
+.empty span { display: block; margin-top: 2px; font-size: 12px; line-height: 17px; color: var(--quiet); }
+.fold { display: flex; align-items: center; gap: 7px; width: 100%; box-sizing: border-box; margin-top: 14px; padding: 8px 12px 8px 10px; border-top: 1px solid var(--line); font-size: 12px; line-height: 16px; }
+.fold svg { flex: none; }
+.fold.on svg { transform: rotate(90deg); }
+.n { font-size: 11px; color: var(--quiet); }
+
+/* Rows */
+.row { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; column-gap: 7px; align-items: start; padding: 3px 12px 3px 10px; cursor: pointer; }
+.list > .row:first-child { margin-top: 8px; }
+.row:hover { background: var(--vscode-list-hoverBackground); }
+.row.sel { background: var(--vscode-list-inactiveSelectionBackground); }
+.row.dragging { opacity: .5; }
+.row.drop-before { box-shadow: inset 0 2px 0 var(--vscode-foreground); }
+.row.drop-after { box-shadow: inset 0 -2px 0 var(--vscode-foreground); }
+.nm { display: block; width: 100%; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--mono); font-size: 14px; line-height: 20px; }
+.row.fresh .nm { font-weight: 700; }
+.row.gone .nm { color: var(--quiet); text-decoration: line-through; }
+.rename { width: 100%; height: 20px; box-sizing: border-box; margin: 0 0 0 -5px; padding: 0 4px; border: 1px solid var(--vscode-focusBorder); border-radius: 2px; background: var(--vscode-input-background); color: var(--vscode-input-foreground); font-family: var(--mono); font-size: 14px; line-height: 18px; outline: none; }
+.end { display: flex; align-items: center; height: 20px; }
+.age { font-size: 11px; color: var(--quiet); white-space: nowrap; }
+.acts { display: none; gap: 2px; }
+.row:hover .acts, .row:focus-within .acts { display: flex; }
+.row:hover .has-acts .age, .row:focus-within .has-acts .age { display: none; }
+.ic { display: flex; align-items: center; justify-content: center; width: 22px; height: 20px; border-radius: 3px; }
+.ic:hover { background: var(--vscode-toolbar-hoverBackground); }
+
+/* Second line: only when there is news */
+.sub { grid-column: 2 / 4; padding-bottom: 2px; font-size: 12px; line-height: 16px; color: var(--quiet); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sub b { font-weight: 600; color: var(--vscode-foreground); }
+.sub code, .away code { padding: 0; background: none; font-family: var(--mono); font-size: 13px; color: var(--vscode-foreground); }
+.ask { grid-column: 2 / 4; display: flex; align-items: center; gap: 8px; padding: 2px 0 4px; }
+.ask .sub { flex: 1; min-width: 0; padding-bottom: 0; }
+.go { flex: none; height: 22px; padding: 0 10px; border-radius: 2px; background: var(--you); color: #000; font-size: 12px; font-weight: 600; }
+.add { flex: none; height: 22px; box-sizing: border-box; padding: 0 9px; border: 1px solid var(--field-line); border-radius: 2px; font-size: 12px; }
+.add:hover { background: var(--vscode-toolbar-hoverBackground); }
+.away { margin: 0 12px 6px 29px; padding: 8px 10px; border: 1px solid var(--field-line); border-radius: 3px; font-size: 12px; line-height: 17px; }
+.away strong { display: block; font-weight: 600; }
+.away span { display: block; margin-top: 2px; color: var(--quiet); }
+
+/* Marks: terminal cursors. The taller the cursor, the more the session wants you. */
+.mk { position: relative; width: 12px; height: 20px; }
+.mk i { position: absolute; left: 0; bottom: 3px; width: 7px; background: currentColor; }
+.mk.need { color: var(--you); }
+.mk.need i { height: 15px; animation: blink 1.2s steps(1, end) infinite; }
+.mk.reply i { height: 7px; }
+.mk.open { color: var(--quiet); }
+.mk.open i { height: 2px; }
+.mk.work svg { position: absolute; left: -1px; top: 4px; animation: turn 3.2s linear infinite; }
+@keyframes blink { 0% { opacity: 1; } 50% { opacity: .3; } }
+@keyframes turn { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .mk.need i, .mk.work svg { animation: none; } }

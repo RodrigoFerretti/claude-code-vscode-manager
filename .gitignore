@@ -1,0 +1,4 @@
+*.vsix
+node_modules/
+# design notes and wireframes stay on my computer
+docs/

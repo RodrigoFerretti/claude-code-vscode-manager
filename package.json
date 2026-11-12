@@ -1,0 +1,29 @@
+{
+  "name": "claude-sessions",
+  "displayName": "Claude Sessions",
+  "description": "Keep a short list of the Claude Code sessions you are continuing, see which one needs you, and find any old one.",
+  "version": "0.1.0",
+  "publisher": "local",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": { "vscode": "^1.109.0" },
+  "categories": ["Other"],
+  "main": "./extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "viewsContainers": {
+      "secondarySidebar": [
+        { "id": "claudeSessions", "title": "Claude Sessions", "icon": "media/icon.svg" }
+      ]
+    },
+    "views": {
+      "claudeSessions": [
+        { "type": "webview", "id": "claudeSessions.list", "name": "Claude Sessions" }
+      ]
+    }
+  },
+  "scripts": {
+    "test": "node test.js",
+    "package": "npx --yes @vscode/vsce package --skip-license --allow-missing-repository"
+  }
+}
