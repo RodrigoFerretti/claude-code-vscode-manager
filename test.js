@@ -49,6 +49,20 @@ try {
   assert.strictEqual(S.markOf({ status: 'idle', statusUpdatedAt: 50 }, 10), 'reply');
   assert.strictEqual(S.markOf({ status: 'idle', statusUpdatedAt: 50 }, 60), 'open');
 
+  const asked = { text: 'Can you log in?', asks: true };
+  assert.strictEqual(S.markOf({ status: 'idle', statusUpdatedAt: 50 }, 60, asked), 'need', 'a turn that ends on a question needs you even once seen');
+  assert.strictEqual(S.markOf({ status: 'busy' }, 0, asked), 'work');
+  assert.deepStrictEqual(S.subline('need', asked, proj), { text: 'Can you log in?' });
+  fs.writeFileSync(path.join(dir, id + '.jsonl'), jsonl([
+    { type: 'assistant', cwd: proj, message: { content: [{ type: 'text', text: 'Log in and tell me when you are done? https://x.io/login?a=1\n' }] } },
+  ]));
+  assert.strictEqual(S.scan(root, new Map(), history).get(id).last.asks, true, 'a trailing link does not hide the question');
+  assert.strictEqual(S.scan(root, new Map(), history).size, 1);
+  for (const [text, asks] of [['Done.', false], ['Which one? I picked **A**.', false], ['Ship it?**', true]]) {
+    fs.writeFileSync(path.join(dir, id + '.jsonl'), jsonl([{ type: 'assistant', cwd: proj, message: { content: [{ type: 'text', text }] } }]));
+    assert.strictEqual(S.scan(root, new Map(), history).get(id).last.asks, asks, text);
+  }
+
   assert.deepStrictEqual(S.subline('need', s.last, proj), { text: 'Wants to run', code: 'npm test' });
   assert.deepStrictEqual(S.subline('work', { tool: 'Edit', arg: proj + '/src/a.ts' }, proj), { text: 'Editing', code: 'src/a.ts' });
   assert.deepStrictEqual(S.subline('reply', { text: 'Done.' }, proj), { text: 'Done.' });

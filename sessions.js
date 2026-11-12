@@ -33,6 +33,8 @@ function readTail(file, size) {
   return out;
 }
 
+const endsOnQuestion = t => /\?$/.test(t.replace(/\S+:\/\/\S+/g, '').replace(/[\s*_`'")\]]+$/, ''));
+
 const toolArg = input => {
   const i = input || {};
   return oneLine(i.command ?? i.file_path ?? i.path ?? i.pattern ?? i.url ?? i.description ?? i.prompt ?? '', 140);
@@ -49,7 +51,7 @@ function describe(file, size) {
     if (e.type !== 'assistant' || e.isSidechain || !Array.isArray(e.message?.content)) continue;
     for (const b of e.message.content) {
       if (b.type === 'tool_use') last = { tool: b.name, arg: toolArg(b.input) };
-      else if (b.type === 'text' && b.text?.trim()) last = { text: oneLine(b.text, 140) };
+      else if (b.type === 'text' && b.text?.trim()) last = { text: oneLine(b.text, 140), asks: endsOnQuestion(b.text) };
     }
   }
   return { title: custom || title, cwds, last };
@@ -115,11 +117,12 @@ function readLive(claudeDir) {
   return out;
 }
 
-/** need = a prompt is open · work = mid-turn · reply = answered, not looked at · open = idle in a terminal · closed */
-function markOf(live, seenAt) {
+/** need = a prompt is open, or Claude ended its turn on a question · work = mid-turn · reply = answered, not looked at · open = idle in a terminal · closed */
+function markOf(live, seenAt, last) {
   if (!live) return 'closed';
   if (live.status === 'waiting') return 'need';
   if (live.status === 'busy') return 'work';
+  if (last?.asks) return 'need';
   return (live.statusUpdatedAt || 0) > (seenAt || 0) ? 'reply' : 'open';
 }
 
@@ -130,7 +133,7 @@ function subline(mark, last, cwd) {
   const rel = a => (cwd && a.startsWith(cwd + path.sep) ? a.slice(cwd.length + 1) : a);
   if (mark === 'need') {
     // The status file only says "a dialog is open"; the last tool call is the best guess at what it is about.
-    if (!last?.tool) return { text: 'Waiting for your answer' };
+    if (!last?.tool) return { text: last?.asks ? last.text : 'Waiting for your answer' };
     if (last.tool === 'Bash') return { text: 'Wants to run', code: last.arg };
     if (last.tool === 'AskUserQuestion') return { text: 'Asked you a question' };
     if (last.tool === 'ExitPlanMode') return { text: 'Wants you to review its plan' };

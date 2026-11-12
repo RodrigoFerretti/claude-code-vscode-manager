@@ -37,7 +37,7 @@ function activate(context) {
       sessions = S.scan(CLAUDE, tails, history());
       live = S.readLive(CLAUDE);
       const row = id => {
-        const s = sessions.get(id), l = live.get(id), mark = S.markOf(l, st.seen[id]);
+        const s = sessions.get(id), l = live.get(id), mark = S.markOf(l, st.seen[id], s?.last);
         return { id, name: nameOf(id), mark, sub: S.subline(mark, s?.last, s?.cwd), t: l ? l.statusUpdatedAt || l.updatedAt : s?.mtime, gone: !s && !l };
       };
       const state = { type: 'state', total: sessions.size, active: st.active.map(row), finished: st.finished.map(row) };
