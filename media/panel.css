@@ -53,7 +53,8 @@ button:focus-visible { outline: 1px solid var(--vscode-focusBorder); outline-off
 /* Second line: only when there is news */
 .sub { grid-column: 2 / 4; padding-bottom: 2px; font-size: 12px; line-height: 16px; color: var(--quiet); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sub b { font-weight: 600; color: var(--vscode-foreground); }
-.sub code, .away code { padding: 0; background: none; font-family: var(--mono); font-size: 13px; color: var(--vscode-foreground); }
+.away code { padding: 0; background: none; font-family: var(--mono); font-size: 13px; color: var(--vscode-foreground); }
+.sub code { padding: 0; background: none; font-family: var(--mono); font-size: 12px; color: inherit; }
 .ask { grid-column: 2 / 4; display: flex; align-items: center; gap: 8px; padding: 2px 0 4px; }
 .ask .sub { flex: 1; min-width: 0; padding-bottom: 0; }
 .go { flex: none; height: 22px; padding: 0 10px; border-radius: 2px; background: var(--you); color: #000; font-size: 12px; font-weight: 600; }
